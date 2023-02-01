@@ -352,7 +352,7 @@ class PlayState extends MusicBeatState
 
 		FlxG.camera.follow(camFollow, LOCKON, 0.04);
 		// FlxG.camera.setScrollBounds(0, FlxG.width, 0, FlxG.height);
-		FlxG.camera.zoom = defaultCamZoom;
+		camGame.zoom = defaultCamZoom;
 		FlxG.camera.focusOn(camFollow.getPosition());
 
 		FlxG.worldBounds.set(0, 0, FlxG.width, FlxG.height);
@@ -423,7 +423,7 @@ class PlayState extends MusicBeatState
 						camFollow.y = -2050;
 						camFollow.x += 200;
 						FlxG.camera.focusOn(camFollow.getPosition());
-						FlxG.camera.zoom = 1.5;
+						camGame.zoom = 1.5;
 
 						new FlxTimer().start(0.8, function(tmr:FlxTimer)
 						{
@@ -488,7 +488,7 @@ class PlayState extends MusicBeatState
 			cameraMovement();
 		};
 
-		FlxG.camera.zoom = defaultCamZoom * 1.2;
+		camGame.zoom = defaultCamZoom * 1.2;
 
 		camFollow.x += 100;
 		camFollow.y += 100;
@@ -508,7 +508,7 @@ class PlayState extends MusicBeatState
 
 			camHUD.visible = false;
 
-			FlxG.camera.zoom *= 1.2;
+			camGame.zoom *= 1.2;
 			camFollow.y += 100;
 
 			tankCutscene.startSyncAudio = FlxG.sound.load(Paths.sound('wellWellWell'));
@@ -793,7 +793,7 @@ class PlayState extends MusicBeatState
 			// tankCutscene.startSyncAudio = cutsceneSound;
 			// tankCutscene.animation.curAnim.curFrame
 
-			FlxG.camera.zoom = defaultCamZoom * 1.15;
+			camGame.zoom = defaultCamZoom * 1.15;
 
 			camFollow.x -= 200;
 
@@ -804,15 +804,15 @@ class PlayState extends MusicBeatState
 			{
 				camFollow.x += 400;
 				camFollow.y += 150;
-				FlxG.camera.zoom = defaultCamZoom * 1.4;
-				FlxTween.tween(FlxG.camera, {zoom: FlxG.camera.zoom + 0.1}, 0.5, {ease: FlxEase.elasticOut});
+				camGame.zoom = defaultCamZoom * 1.4;
+				FlxTween.tween(FlxG.camera, {zoom: camGame.zoom + 0.1}, 0.5, {ease: FlxEase.elasticOut});
 				FlxG.camera.focusOn(camFollow.getPosition());
 				boyfriend.playAnim('singUPmiss');
 				boyfriend.animation.finishCallback = function(animFinish:String)
 				{
 					camFollow.x -= 400;
 					camFollow.y -= 150;
-					FlxG.camera.zoom /= 1.4;
+					camGame.zoom /= 1.4;
 					FlxG.camera.focusOn(camFollow.getPosition());
 
 					boyfriend.animation.finishCallback = null;
@@ -823,14 +823,14 @@ class PlayState extends MusicBeatState
 			{
 				camFollow.y -= 170;
 				camFollow.x += 200;
-				FlxTween.tween(FlxG.camera, {zoom: FlxG.camera.zoom * 1.3}, 2.1, {
+				FlxTween.tween(FlxG.camera, {zoom: camGame.zoom * 1.3}, 2.1, {
 					ease: FlxEase.quadInOut
 				});
 
 				new FlxTimer().start(2.2, function(swagTimer:FlxTimer)
 				{
 					// FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom}, 0.7, {ease: FlxEase.elasticOut});
-					FlxG.camera.zoom = 0.8;
+					camGame.zoom = 0.8;
 					// camFollow.y -= 100;
 					boyfriend.visible = false;
 					bfCatchGf.visible = true;
@@ -1563,7 +1563,7 @@ class PlayState extends MusicBeatState
 
 		if (camZooming)
 		{
-			FlxG.camera.zoom = FlxMath.lerp(defaultCamZoom, FlxG.camera.zoom, 0.95);
+			camGame.zoom = FlxMath.lerp(defaultCamZoom, camGame.zoom, 0.95);
 			camHUD.zoom = FlxMath.lerp(1, camHUD.zoom, 0.95);
 		}
 
@@ -1891,8 +1891,8 @@ class PlayState extends MusicBeatState
 
 				if (SONG.song.toLowerCase() == 'eggnog')
 				{
-					var blackShit:FlxSprite = new FlxSprite(-FlxG.width * FlxG.camera.zoom,
-						-FlxG.height * FlxG.camera.zoom).makeGraphic(FlxG.width * 3, FlxG.height * 3, FlxColor.BLACK);
+					var blackShit:FlxSprite = new FlxSprite(-FlxG.width * camGame.zoom,
+						-FlxG.height * camGame.zoom).makeGraphic(FlxG.width * 3, FlxG.height * 3, FlxColor.BLACK);
 					blackShit.scrollFactor.set();
 					add(blackShit);
 					camHUD.visible = false;
@@ -2534,15 +2534,15 @@ class PlayState extends MusicBeatState
 
 		if (PreferencesMenu.getPref('camera-zoom'))
 		{
-			if (curSong.toLowerCase() == 'milf' && curBeat >= 168 && curBeat < 200 && camZooming && FlxG.camera.zoom < 1.35)
+			if (curSong.toLowerCase() == 'milf' && curBeat >= 168 && curBeat < 200 && camZooming && camGame.zoom < 1.35)
 			{
-				FlxG.camera.zoom += 0.015;
+				camGame.zoom += 0.015;
 				camHUD.zoom += 0.03;
 			}
 
-			if (camZooming && FlxG.camera.zoom < 1.35 && curBeat % 4 == 0)
+			if (camZooming && camGame.zoom < 1.35 && curBeat % 4 == 0)
 			{
-				FlxG.camera.zoom += 0.015;
+				camGame.zoom += 0.015;
 				camHUD.zoom += 0.03;
 			}
 		}
