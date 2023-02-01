@@ -4,7 +4,7 @@ import flixel.FlxG;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
-#if cpp
+#if (cpp && polymod)
 import polymod.Polymod;
 import sys.FileSystem;
 #end
