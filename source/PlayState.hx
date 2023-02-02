@@ -2192,7 +2192,8 @@ class PlayState extends MusicBeatState
 		{
 			boyfriend.holdTimer = 0;
 
-			var possibleNotes:Array<Note> = []; // notes that can be hit
+			var possibleNotes:Array<Dynamic> = [[],[],[],[]]; // notes that can be hit
+			var noteInTotal:Array<Note> = [];
 			var directionList:Array<Int> = []; // directions that can be hit
 			var dumbNotes:Array<Note> = []; // notes to kill later
 
@@ -2200,34 +2201,25 @@ class PlayState extends MusicBeatState
 			{
 				if (daNote.canBeHit && daNote.mustPress && !daNote.tooLate && !daNote.wasGoodHit)
 				{
-					if (pressArray[daNote.noteData])
-						goodNoteHit(daNote);
-
-					if (directionList.contains(daNote.noteData))
-					{
-						for (coolNote in possibleNotes)
-						{
-							if (coolNote.noteData == daNote.noteData && Math.abs(daNote.strumTime - coolNote.strumTime) < 10)
-							{ // if it's the same note twice at < 10ms distance, just delete it
-								// EXCEPT u cant delete it in this loop cuz it fucks with the collection lol
-								dumbNotes.push(daNote);
-								break;
-							}
-							else if (coolNote.noteData == daNote.noteData && daNote.strumTime < coolNote.strumTime)
-							{ // if daNote is earlier than existing note (coolNote), replace
-								possibleNotes.remove(coolNote);
-								possibleNotes.push(daNote);
-								break;
-							}
-						}
-					}
-					else
-					{
-						possibleNotes.push(daNote);
-						directionList.push(daNote.noteData);
-					}
+					possibleNotes[daNote.noteData].push(daNote);
+					noteInTotal.push(daNote);
+					break;
 				}
 			});
+
+			if (noteInTotal > 0)
+			{
+				for (i in 0...possibleNotes.length)
+				{
+					var leNote = possibleNotes[i][0];
+
+					if (pressArray[leNote.noteData])
+					{
+						goodNoteHit(leNote);
+						break;
+					}
+				}
+			}
 
 			for (note in dumbNotes)
 			{
@@ -2237,24 +2229,11 @@ class PlayState extends MusicBeatState
 				note.destroy();
 			}
 
-			possibleNotes.sort((a, b) -> Std.int(a.strumTime - b.strumTime));
-
-			if (perfectMode)
-				goodNoteHit(possibleNotes[0]);
-			else if (possibleNotes.length > 0)
+			for (i in 0...possibleNotes.length)
 			{
-				for (shit in 0...pressArray.length)
-				{ // if a direction is hit that shouldn't be
-					if (pressArray[shit] && !directionList.contains(shit))
-						noteMiss(shit);
-				}
+				possibleNotes[i].sort((a, b) -> Std.int(a.strumTime - b.strumTime));
 			}
-			else
-			{
-				for (shit in 0...pressArray.length)
-					if (pressArray[shit])
-						noteMiss(shit);
-			}
+			noteInTotal.sort((a, b) -> Std.int(a.strumTime - b.strumTime));
 		}
 
 		if (boyfriend.holdTimer > Conductor.stepCrochet * 4 * 0.001 && !holdArray.contains(true))
