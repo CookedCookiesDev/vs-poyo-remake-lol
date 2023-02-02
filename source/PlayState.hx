@@ -2204,7 +2204,9 @@ class PlayState extends MusicBeatState
 				if (daNote.canBeHit && daNote.mustPress && !daNote.tooLate && !daNote.wasGoodHit)
 				{
 					if (pressArray[daNote.noteData])
+					{
 						goodNoteHit(daNote);
+					}
 
 					for (coolNote in possibleNotes)
 					{
@@ -2215,7 +2217,7 @@ class PlayState extends MusicBeatState
 							break;
 						}
 						else if (coolNote.noteData == daNote.noteData && daNote.strumTime < coolNote.strumTime)
-						{ // if daNote is earlier than existing note (coolNote), replace
+						{
 							possibleNotes.remove(coolNote);
 							possibleNotes.push(daNote);
 							break;
