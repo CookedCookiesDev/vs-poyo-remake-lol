@@ -2196,14 +2196,14 @@ class PlayState extends MusicBeatState
 		});
 
     if (possibleNotes.length != 0)
-    {
+		{
 			for (daNote in possibleNotes)
 			{
-				if (holdArray.contains(true) && daNote.isSustainNote || pressArray.contains(true) && !daNote.isSustainNote)
-					goodNoteHit(daNote);
+				if ((controlPressArray[daNote.noteData] && !daNote.isSustainNote) || (controlArray[daNote.noteData] && daNote.isSustainNote))
+					goodNoteHit(daNote); 
 				break;
 			}
-    }
+		}
 
 		for (note in dumbNotes)
 		{
