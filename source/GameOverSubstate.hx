@@ -39,7 +39,6 @@ class GameOverSubstate extends MusicBeatSubstate
 		}
 
 		super();
-
 		Conductor.songPosition = 0;
 
 		bf = new Boyfriend(x, y, daBf);
@@ -64,6 +63,10 @@ class GameOverSubstate extends MusicBeatSubstate
 			randomCensor = [1, 3, 8, 13, 17, 21];
 
 		randomGameover = FlxG.random.int(1, 25, randomCensor);
+		#if mobile
+		addVirtualPad(NONE, A_B);
+		addVirtualPadCamera();
+		#end
 	}
 
 	var playingDeathSound:Bool = false;

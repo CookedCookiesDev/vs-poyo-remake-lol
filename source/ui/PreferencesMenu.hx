@@ -33,7 +33,6 @@ class PreferencesMenu extends ui.OptionsState.Page
 		createPrefItem('naughtyness', 'censor-naughty', true);
 		createPrefItem('downscroll', 'downscroll', false);
 		createPrefItem('flashing menu', 'flashing-menu', true);
-		createPrefItem('Camera Zooming on Beat', 'camera-zoom', true);
 		createPrefItem('FPS Counter', 'fps-counter', true);
 		createPrefItem('Auto Pause', 'auto-pause', false);
 
@@ -50,6 +49,11 @@ class PreferencesMenu extends ui.OptionsState.Page
 		{
 			camFollow.y = selected.y;
 		});
+
+		#if mobile
+		addVirtualPad(LEFT_FULL, A_B);
+		addVirtualPadCamera();
+		#end
 	}
 
 	public static function getPref(pref:String):Dynamic
