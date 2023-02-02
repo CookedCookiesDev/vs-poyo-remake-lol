@@ -103,9 +103,6 @@ class PlayState extends MusicBeatState
 	private var camHUD:FlxCamera;
 	private var camGame:FlxCamera;
 
-	private var camHUDZoomVar:Float = 0;
-	//important for full screen
-
 	var dialogue:Array<String> = ['blah blah blah', 'coolswag'];
 
 	public static var seenCutscene:Bool = false;
@@ -253,7 +250,7 @@ class PlayState extends MusicBeatState
 		gf = new Character(400, 130, gfVersion);
 		gf.scrollFactor.set(0.95, 0.95);
 
-		dad = new Character(100, 100, 'dad');
+		dad = new Character(100, 100, SONG.'dad');
 
 		camPos = new FlxPoint(dad.getGraphicMidpoint().x, dad.getGraphicMidpoint().y);
 
@@ -355,7 +352,7 @@ class PlayState extends MusicBeatState
 
 		FlxG.camera.follow(camFollow, LOCKON, 0.04);
 		// FlxG.camera.setScrollBounds(0, FlxG.width, 0, FlxG.height);
-		camGame.zoom = defaultCamZoom;
+		FlxG.camera.zoom = defaultCamZoom;
 		FlxG.camera.focusOn(camFollow.getPosition());
 
 		FlxG.worldBounds.set(0, 0, FlxG.width, FlxG.height);
@@ -399,7 +396,6 @@ class PlayState extends MusicBeatState
 		iconP2.cameras = [camHUD];
 		scoreTxt.cameras = [camHUD];
 		doof.cameras = [camHUD];
-
 		#if mobile
 		addHitbox();
 		#end
@@ -430,7 +426,7 @@ class PlayState extends MusicBeatState
 						camFollow.y = -2050;
 						camFollow.x += 200;
 						FlxG.camera.focusOn(camFollow.getPosition());
-						camGame.zoom = 1.5;
+						FlxG.camera.zoom = 1.5;
 
 						new FlxTimer().start(0.8, function(tmr:FlxTimer)
 						{
@@ -495,7 +491,7 @@ class PlayState extends MusicBeatState
 			cameraMovement();
 		};
 
-		camGame.zoom = defaultCamZoom * 1.2;
+		FlxG.camera.zoom = defaultCamZoom * 1.2;
 
 		camFollow.x += 100;
 		camFollow.y += 100;
@@ -515,7 +511,7 @@ class PlayState extends MusicBeatState
 
 			camHUD.visible = false;
 
-			camGame.zoom *= 1.2;
+			FlxG.camera.zoom *= 1.2;
 			camFollow.y += 100;
 
 			tankCutscene.startSyncAudio = FlxG.sound.load(Paths.sound('wellWellWell'));
@@ -800,7 +796,7 @@ class PlayState extends MusicBeatState
 			// tankCutscene.startSyncAudio = cutsceneSound;
 			// tankCutscene.animation.curAnim.curFrame
 
-			camGame.zoom = defaultCamZoom * 1.15;
+			FlxG.camera.zoom = defaultCamZoom * 1.15;
 
 			camFollow.x -= 200;
 
@@ -811,15 +807,15 @@ class PlayState extends MusicBeatState
 			{
 				camFollow.x += 400;
 				camFollow.y += 150;
-				camGame.zoom = defaultCamZoom * 1.4;
-				FlxTween.tween(FlxG.camera, {zoom: camGame.zoom + 0.1}, 0.5, {ease: FlxEase.elasticOut});
+				FlxG.camera.zoom = defaultCamZoom * 1.4;
+				FlxTween.tween(FlxG.camera, {zoom: FlxG.camera.zoom + 0.1}, 0.5, {ease: FlxEase.elasticOut});
 				FlxG.camera.focusOn(camFollow.getPosition());
 				boyfriend.playAnim('singUPmiss');
 				boyfriend.animation.finishCallback = function(animFinish:String)
 				{
 					camFollow.x -= 400;
 					camFollow.y -= 150;
-					camGame.zoom /= 1.4;
+					FlxG.camera.zoom /= 1.4;
 					FlxG.camera.focusOn(camFollow.getPosition());
 
 					boyfriend.animation.finishCallback = null;
@@ -830,14 +826,14 @@ class PlayState extends MusicBeatState
 			{
 				camFollow.y -= 170;
 				camFollow.x += 200;
-				FlxTween.tween(FlxG.camera, {zoom: camGame.zoom * 1.3}, 2.1, {
+				FlxTween.tween(FlxG.camera, {zoom: FlxG.camera.zoom * 1.3}, 2.1, {
 					ease: FlxEase.quadInOut
 				});
 
 				new FlxTimer().start(2.2, function(swagTimer:FlxTimer)
 				{
 					// FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom}, 0.7, {ease: FlxEase.elasticOut});
-					camGame.zoom = 0.8;
+					FlxG.camera.zoom = 0.8;
 					// camFollow.y -= 100;
 					boyfriend.visible = false;
 					bfCatchGf.visible = true;
@@ -1570,7 +1566,7 @@ class PlayState extends MusicBeatState
 
 		if (camZooming)
 		{
-			camGame.zoom = FlxMath.lerp(defaultCamZoom, camGame.zoom, 0.95);
+			FlxG.camera.zoom = FlxMath.lerp(defaultCamZoom, FlxG.camera.zoom, 0.95);
 		}
 
 		FlxG.watch.addQuick("beatShit", curBeat);
@@ -1897,8 +1893,8 @@ class PlayState extends MusicBeatState
 
 				if (SONG.song.toLowerCase() == 'eggnog')
 				{
-					var blackShit:FlxSprite = new FlxSprite(-FlxG.width * camGame.zoom,
-						-FlxG.height * camGame.zoom).makeGraphic(FlxG.width * 3, FlxG.height * 3, FlxColor.BLACK);
+					var blackShit:FlxSprite = new FlxSprite(-FlxG.width * FlxG.camera.zoom,
+						-FlxG.height * FlxG.camera.zoom).makeGraphic(FlxG.width * 3, FlxG.height * 3, FlxColor.BLACK);
 					blackShit.scrollFactor.set();
 					add(blackShit);
 					camHUD.visible = false;
@@ -2197,30 +2193,36 @@ class PlayState extends MusicBeatState
 			boyfriend.holdTimer = 0;
 
 			var possibleNotes:Array<Note> = []; // notes that can be hit
+			var directionList:Array<Int> = []; // directions that can be hit
 			var dumbNotes:Array<Note> = []; // notes to kill later
 
 			notes.forEachAlive(function(daNote:Note)
 			{
 				if (daNote.canBeHit && daNote.mustPress && !daNote.tooLate && !daNote.wasGoodHit)
 				{
-					for (coolNote in possibleNotes)
+					goodNoteHit(daNote);
+					if (directionList.contains(daNote.noteData))
 					{
-						if (coolNote.noteData == daNote.noteData && Math.abs(daNote.strumTime - coolNote.strumTime) < 10)
-						{ // if it's the same note twice at < 10ms distance, just delete it
-							// EXCEPT u cant delete it in this loop cuz it fucks with the collection lol
-							dumbNotes.push(daNote);
-							break;
-						}
-						else if (coolNote.noteData == daNote.noteData && daNote.strumTime < coolNote.strumTime)
-						{ // if daNote is earlier than existing note (coolNote), replace
-							possibleNotes.remove(coolNote);
-							possibleNotes.push(daNote);
-							break;
+						for (coolNote in possibleNotes)
+						{
+							if (coolNote.noteData == daNote.noteData && Math.abs(daNote.strumTime - coolNote.strumTime) < 10)
+							{ // if it's the same note twice at < 10ms distance, just delete it
+								// EXCEPT u cant delete it in this loop cuz it fucks with the collection lol
+								dumbNotes.push(daNote);
+								break;
+							}
+							else if (coolNote.noteData == daNote.noteData && daNote.strumTime < coolNote.strumTime)
+							{ // if daNote is earlier than existing note (coolNote), replace
+								possibleNotes.remove(coolNote);
+								possibleNotes.push(daNote);
+								break;
+							}
 						}
 					}
 					else
 					{
 						possibleNotes.push(daNote);
+						directionList.push(daNote.noteData);
 					}
 				}
 			});
@@ -2243,11 +2245,6 @@ class PlayState extends MusicBeatState
 				{ // if a direction is hit that shouldn't be
 					if (pressArray[shit] && !directionList.contains(shit))
 						noteMiss(shit);
-				}
-				for (coolNote in possibleNotes)
-				{
-					if (pressArray[coolNote.noteData])
-						goodNoteHit(coolNote);
 				}
 			}
 			else
@@ -2535,14 +2532,14 @@ class PlayState extends MusicBeatState
 
 		if (PreferencesMenu.getPref('camera-zoom'))
 		{
-			if (curSong.toLowerCase() == 'milf' && curBeat >= 168 && curBeat < 200 && camZooming && camGame.zoom < 1.35)
+			if (curSong.toLowerCase() == 'milf' && curBeat >= 168 && curBeat < 200 && camZooming && FlxG.camera.zoom < 1.35)
 			{
-				camGame.zoom += 0.015;
+				FlxG.camera.zoom += 0.015;
 			}
 
-			if (camZooming && camGame.zoom < 1.35 && curBeat % 4 == 0)
+			if (camZooming && FlxG.camera.zoom < 1.35 && curBeat % 4 == 0)
 			{
-				camGame.zoom += 0.015;
+				FlxG.camera.zoom += 0.015;
 			}
 		}
 
