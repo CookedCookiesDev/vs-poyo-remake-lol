@@ -2217,11 +2217,15 @@ class PlayState extends MusicBeatState
 							break;
 						}
 						else if (coolNote.noteData == daNote.noteData && daNote.strumTime < coolNote.strumTime)
-						{
+						{ // if daNote is earlier than existing note (coolNote), replace
 							possibleNotes.remove(coolNote);
 							possibleNotes.push(daNote);
 							break;
 						}
+					}
+					else
+					{
+						possibleNotes.push(daNote);
 					}
 				}
 			});
