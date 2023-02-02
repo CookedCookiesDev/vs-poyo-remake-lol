@@ -2201,7 +2201,7 @@ class PlayState extends MusicBeatState
 			{
 				var daNote = directionsArray[theHuh.noteData][0];
 				var coolNote = directionsArray[theHuh.noteData][1];
-				if (Math.abs(daNote.strumTime, coolNote.strumTime) < 15)
+				if ((coolNote.strumTime - daNote.strumTime) < 15)
 					dumbNotes.push(coolNote);
 
 				if ((holdArray.contains(true) && daNote.isSustainNote) || (pressArray.contains(true) && !daNote.isSustainNote))
