@@ -2194,7 +2194,7 @@ class PlayState extends MusicBeatState
 
 			var possibleNotes:Array<Dynamic> = [[],[],[],[]]; // notes that can be hit
 			var noteInTotal:Array<Note> = [];
-			var directionList:Array<Int> = []; // directions that can be hit
+			var directionList:Array<Note> = []; // directions that can be hit
 			var dumbNotes:Array<Note> = []; // notes to kill later
 
 			notes.forEachAlive(function(daNote:Note)
@@ -2204,7 +2204,6 @@ class PlayState extends MusicBeatState
 					possibleNotes[daNote.noteData].push(daNote);
 					noteInTotal.push(daNote);
 				}
-				break;
 			});
 
 			if (noteInTotal > 0)
@@ -2216,8 +2215,8 @@ class PlayState extends MusicBeatState
 					if (pressArray[leNote.noteData])
 					{
 						goodNoteHit(leNote);
-					}
 					break;
+					}
 				}
 			}
 
