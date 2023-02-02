@@ -2204,7 +2204,6 @@ class PlayState extends MusicBeatState
 						goodNoteHit(daNote);
 				}
 			});
-		}
 
 			for (note in dumbNotes)
 			{
@@ -2212,11 +2211,6 @@ class PlayState extends MusicBeatState
 				note.kill();
 				notes.remove(note, true);
 				note.destroy();
-			}
-
-			for (i in 0...possibleNotes.length)
-			{
-				possibleNotes[i].sort((a, b) -> Std.int(a.strumTime - b.strumTime));
 			}
 		}
 
