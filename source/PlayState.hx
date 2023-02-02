@@ -2223,10 +2223,6 @@ class PlayState extends MusicBeatState
 							break;
 						}
 					}
-					else
-					{
-						possibleNotes.push(daNote);
-					}
 				}
 			});
 
