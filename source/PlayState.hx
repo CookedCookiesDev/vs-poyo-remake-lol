@@ -2181,49 +2181,36 @@ class PlayState extends MusicBeatState
 			controls.NOTE_RIGHT_R
 		];
 
-		// HOLDS, check for sustain notes
-		if (holdArray.contains(true) && /*!boyfriend.stunned && */ generatedMusic)
-		{
-			notes.forEachAlive(function(daNote:Note)
-			{
-				if (daNote.isSustainNote && daNote.canBeHit && daNote.mustPress && holdArray[daNote.noteData])
-					goodNoteHit(daNote);
-			});
-		}
-
-		// PRESSES, check for note hits
-		if (pressArray.contains(true) && /*!boyfriend.stunned && */ generatedMusic)
-		{
 			boyfriend.holdTimer = 0;
 
 			var possibleNotes:Array<Note> = []; // notes that can be hit
-			var dumbNotes:Array<Note> = []; // notes to kill later
-
+			var dumbNotes:Array<Note> = []; // notes that can be hit
+      var directionsArray:Array<Dynamic> = [[], [], [], []];
 			notes.forEachAlive(function(daNote:Note)
 			{
-				if (daNote.canBeHit && daNote.mustPress && !daNote.tooLate && !daNote.wasGoodHit)
+				if (daNote.mustPress && daNote.canBeHit && !daNote.tooLate)
 				{
-					for (coolNote in possibleNotes)
-					{
-						if (coolNote.noteData == daNote.noteData && Math.abs(daNote.strumTime - coolNote.strumTime) < 10)
-						{ // if it's the same note twice at < 10ms distance, just delete it
-							// EXCEPT u cant delete it in this loop cuz it fucks with the collection lol
-							dumbNotes.push(daNote);
-							break;
-						}
-						else if (coolNote.noteData == daNote.noteData && daNote.strumTime < coolNote.strumTime)
-						{ // if daNote is earlier than existing note (coolNote), replace
-							possibleNotes.remove(coolNote);
-							possibleNotes.push(daNote);
-							break;
-						}
-					}
-					else
-					{
-						possibleNotes.push(daNote);
-					}
+				  possibleNotes.push(daNote);
+				  directionsArray[daNote.noteData].push(daNote);
 				}
 			});
+
+      if (possibleNotes.length != 0)
+      {
+				for (daNote in possibleNotes)
+				{
+					var coolNote = possibleNotes[1];
+					if (daNote.strumTime == coolNote.strumTime && daNote.noteData == coolNote.noteData)
+						dumbNotes.push(coolNote);
+
+					if (directionsArray[daNote.noteData][0] == daNote)
+					{
+						if (holdArray.contains(true) && daNote.isSustainNote || pressArray.contains(true) && !daNote.isSustainNote)
+							goodNoteHit(daNote);
+					}
+					break;
+				}
+      }
 
 			for (note in dumbNotes)
 			{
@@ -2234,6 +2221,10 @@ class PlayState extends MusicBeatState
 			}
 
 			possibleNotes.sort((a, b) -> Std.int(a.strumTime - b.strumTime));
+			for (i in 0...directionsArray.length)
+			{
+				directionsArray[i].sort((a, b) -> Std.int(a.strumTime - b.strumTime));
+			}
 
 			if (perfectMode)
 				goodNoteHit(possibleNotes[0]);
@@ -2249,14 +2240,13 @@ class PlayState extends MusicBeatState
 					if (pressArray[coolNote.noteData])
 						goodNoteHit(coolNote);
 				}
-			}
+
 			else
 			{
 				for (shit in 0...pressArray.length)
 					if (pressArray[shit])
 						noteMiss(shit);
 			}
-		}
 
 		if (boyfriend.holdTimer > Conductor.stepCrochet * 4 * 0.001 && !holdArray.contains(true))
 		{
