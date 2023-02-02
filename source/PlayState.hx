@@ -2192,8 +2192,7 @@ class PlayState extends MusicBeatState
 		{
 			boyfriend.holdTimer = 0;
 
-			var possibleNotes:Array<Dynamic> = [[],[],[],[]]; // notes that can be hit
-			var noteInTotal:Array<Note> = [];
+			var possibleNotes:Array<Note> = []; // notes that can be hit
 			var directionList:Array<Int> = []; // directions that can be hit
 			var dumbNotes:Array<Note> = []; // notes to kill later
 
@@ -2201,23 +2200,10 @@ class PlayState extends MusicBeatState
 			{
 				if (daNote.canBeHit && daNote.mustPress && !daNote.tooLate && !daNote.wasGoodHit)
 				{
-					possibleNotes[daNote.noteData].push(daNote);
-					noteInTotal.push(daNote);
+					if (pressArray[daNote.noteData])
+						goodNoteHit(daNote);
 				}
 			});
-
-			if (noteInTotal.length != 0)
-			{
-				for (i in 0...possibleNotes.length)
-				{
-					var leNote = possibleNotes[i][0];
-
-					if (pressArray[leNote.noteData])
-					{
-						goodNoteHit(leNote);
-					break;
-					}
-				}
 			}
 
 			for (note in dumbNotes)
