@@ -2200,9 +2200,6 @@ class PlayState extends MusicBeatState
 			for (theHuh in possibleNotes)
 			{
 				var daNote = directionsArray[theHuh.noteData][0];
-				var coolNote = directionsArray[theHuh.noteData][1];
-				if ((coolNote.strumTime - daNote.strumTime) < 15)
-					dumbNotes.push(coolNote);
 
 				if ((holdArray.contains(true) && daNote.isSustainNote) || (pressArray.contains(true) && !daNote.isSustainNote))
 					goodNoteHit(daNote);
