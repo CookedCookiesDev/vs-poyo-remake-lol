@@ -2199,11 +2199,8 @@ class PlayState extends MusicBeatState
     {
 			for (daNote in possibleNotes)
 			{
-				if (daNote == directionsArray[daNote.noteData][0])
-				{
-					if (holdArray.contains(true) && daNote.isSustainNote || pressArray.contains(true) && !daNote.isSustainNote)
-						goodNoteHit(daNote);
-				}
+				if (holdArray.contains(true) && daNote.isSustainNote || pressArray.contains(true) && !daNote.isSustainNote)
+					goodNoteHit(daNote);
 				break;
 			}
     }
