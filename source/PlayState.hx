@@ -2203,7 +2203,7 @@ class PlayState extends MusicBeatState
 			{
 				if (daNote.canBeHit && daNote.mustPress && !daNote.tooLate && !daNote.wasGoodHit)
 				{
-					if pressArray[daNote.noteData]
+					if (pressArray[daNote.noteData])
 						goodNoteHit(daNote);
 
 					for (coolNote in possibleNotes)
