@@ -2203,8 +2203,8 @@ class PlayState extends MusicBeatState
 				{
 					possibleNotes[daNote.noteData].push(daNote);
 					noteInTotal.push(daNote);
-					break;
 				}
+				break;
 			});
 
 			if (noteInTotal > 0)
@@ -2216,8 +2216,8 @@ class PlayState extends MusicBeatState
 					if (pressArray[leNote.noteData])
 					{
 						goodNoteHit(leNote);
-						break;
 					}
+					break;
 				}
 			}
 
