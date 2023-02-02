@@ -2203,11 +2203,6 @@ class PlayState extends MusicBeatState
 			{
 				if (daNote.canBeHit && daNote.mustPress && !daNote.tooLate && !daNote.wasGoodHit)
 				{
-					if (pressArray[daNote.noteData])
-					{
-						goodNoteHit(daNote);
-					}
-
 					for (coolNote in possibleNotes)
 					{
 						if (coolNote.noteData == daNote.noteData && Math.abs(daNote.strumTime - coolNote.strumTime) < 10)
@@ -2240,12 +2235,19 @@ class PlayState extends MusicBeatState
 
 			possibleNotes.sort((a, b) -> Std.int(a.strumTime - b.strumTime));
 
+			if (perfectMode)
+				goodNoteHit(possibleNotes[0]);
 			else if (possibleNotes.length > 0)
 			{
 				for (shit in 0...pressArray.length)
 				{ // if a direction is hit that shouldn't be
 					if (pressArray[shit] && !directionList.contains(shit))
 						noteMiss(shit);
+				}
+				for (coolNote in possibleNotes)
+				{
+					if (pressArray[coolNote.noteData])
+						goodNoteHit(coolNote);
 				}
 			}
 			else
@@ -2281,6 +2283,7 @@ class PlayState extends MusicBeatState
 				spr.centerOffsets();
 		});
 	}
+
 	function noteMiss(direction:Int = 1):Void
 	{
 		// whole function used to be encased in if (!boyfriend.stunned)
