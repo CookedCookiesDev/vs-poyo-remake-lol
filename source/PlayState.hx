@@ -2181,99 +2181,44 @@ class PlayState extends MusicBeatState
 			controls.NOTE_RIGHT_R
 		];
 
-			boyfriend.holdTimer = 0;
+		boyfriend.holdTimer = 0;
 
-			var possibleNotes:Array<Note> = []; // notes that can be hit
-			var dumbNotes:Array<Note> = []; // notes that can be hit
-      var directionsArray:Array<Dynamic> = [[], [], [], []];
-			notes.forEachAlive(function(daNote:Note)
-			{
-				if (daNote.mustPress && daNote.canBeHit && !daNote.tooLate)
-				{
-				  possibleNotes.push(daNote);
-				  directionsArray[daNote.noteData].push(daNote);
-				}
-			});
-
-      if (possibleNotes.length != 0)
-      {
-				for (daNote in possibleNotes)
-				{
-					var coolNote = possibleNotes[1];
-					if (daNote.strumTime == coolNote.strumTime && daNote.noteData == coolNote.noteData)
-						dumbNotes.push(coolNote);
-
-					if (directionsArray[daNote.noteData][0] == daNote)
-					{
-						if (holdArray.contains(true) && daNote.isSustainNote || pressArray.contains(true) && !daNote.isSustainNote)
-							goodNoteHit(daNote);
-					}
-					break;
-				}
-      }
-
-			for (note in dumbNotes)
-			{
-				FlxG.log.add("killing dumb ass note at " + note.strumTime);
-				note.kill();
-				notes.remove(note, true);
-				note.destroy();
-			}
-
-			possibleNotes.sort((a, b) -> Std.int(a.strumTime - b.strumTime));
-			for (i in 0...directionsArray.length)
-			{
-				directionsArray[i].sort((a, b) -> Std.int(a.strumTime - b.strumTime));
-			}
-
-			if (perfectMode)
-				goodNoteHit(possibleNotes[0]);
-			else if (possibleNotes.length > 0)
-			{
-				for (shit in 0...pressArray.length)
-				{ // if a direction is hit that shouldn't be
-					if (pressArray[shit] && !directionList.contains(shit))
-						noteMiss(shit);
-				}
-				for (coolNote in possibleNotes)
-				{
-					if (pressArray[coolNote.noteData])
-						goodNoteHit(coolNote);
-				}
-
-			else
-			{
-				for (shit in 0...pressArray.length)
-					if (pressArray[shit])
-						noteMiss(shit);
-			}
-
-		if (boyfriend.holdTimer > Conductor.stepCrochet * 4 * 0.001 && !holdArray.contains(true))
+		var possibleNotes:Array<Note> = []; // notes that can be hit
+		var dumbNotes:Array<Note> = []; // notes that can be hit
+    var directionsArray:Array<Dynamic> = [[], [], [], []];
+		notes.forEachAlive(function(daNote:Note)
 		{
-			if (boyfriend.animation.curAnim.name.startsWith('sing') && !boyfriend.animation.curAnim.name.endsWith('miss'))
+			if (daNote.mustPress && daNote.canBeHit && !daNote.tooLate)
 			{
-				boyfriend.playAnim('idle');
+			  possibleNotes.push(daNote);
+			  directionsArray[daNote.noteData].push(daNote);
 			}
-		}
-
-		playerStrums.forEach(function(spr:FlxSprite)
-		{
-			if (pressArray[spr.ID] && spr.animation.curAnim.name != 'confirm')
-				spr.animation.play('pressed');
-			if (!holdArray[spr.ID])
-				spr.animation.play('static');
-
-			if (spr.animation.curAnim.name == 'confirm' && !curStage.startsWith('school'))
-			{
-				spr.centerOffsets();
-				spr.offset.x -= 13;
-				spr.offset.y -= 13;
-			}
-			else
-				spr.centerOffsets();
 		});
-	}
 
+    if (possibleNotes.length != 0)
+    {
+			for (theHuh in possibleNotes)
+			{
+				var daNote = directionsArray[theHuh.noteData][0];
+				var coolNote = directionsArray[theHuh.noteData][1];
+				if (Math.abs(daNote.strumTime, coolNote.strumTime) < 15)
+					dumbNotes.push(coolNote);
+
+				if ((holdArray.contains(true) && daNote.isSustainNote) || (pressArray.contains(true) && !daNote.isSustainNote))
+					goodNoteHit(daNote);
+
+				break;
+			}
+    }
+
+		for (note in dumbNotes)
+		{
+			FlxG.log.add("killing dumb ass note at " + note.strumTime);
+			note.kill();
+			notes.remove(note, true);
+			note.destroy();
+		}
+	}
 	function noteMiss(direction:Int = 1):Void
 	{
 		// whole function used to be encased in if (!boyfriend.stunned)
