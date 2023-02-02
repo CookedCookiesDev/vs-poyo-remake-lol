@@ -49,11 +49,6 @@ class PreferencesMenu extends ui.OptionsState.Page
 		{
 			camFollow.y = selected.y;
 		});
-
-		#if mobile
-		addVirtualPad(LEFT_FULL, A_B);
-		addVirtualPadCamera();
-		#end
 	}
 
 	public static function getPref(pref:String):Dynamic
