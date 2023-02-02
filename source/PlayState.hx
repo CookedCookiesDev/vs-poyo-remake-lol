@@ -2181,36 +2181,83 @@ class PlayState extends MusicBeatState
 			controls.NOTE_RIGHT_R
 		];
 
-		boyfriend.holdTimer = 0;
-
-		var possibleNotes:Array<Note> = []; // notes that can be hit
-		var dumbNotes:Array<Note> = []; // notes that can be hit
-    var directionsArray:Array<Dynamic> = [[], [], [], []];
-		notes.forEachAlive(function(daNote:Note)
+		// HOLDS, check for sustain notes
+		if (holdArray.contains(true) && /*!boyfriend.stunned && */ generatedMusic)
 		{
-			if (daNote.mustPress && daNote.canBeHit && !daNote.tooLate)
+			notes.forEachAlive(function(daNote:Note)
 			{
-			  possibleNotes.push(daNote);
-			  directionsArray[daNote.noteData].push(daNote);
+				if (daNote.isSustainNote && daNote.canBeHit && daNote.mustPress && holdArray[daNote.noteData])
+					goodNoteHit(daNote);
+			});
+		}
+
+		// PRESSES, check for note hits
+		if (pressArray.contains(true) && /*!boyfriend.stunned && */ generatedMusic)
+		{
+			boyfriend.holdTimer = 0;
+
+			var possibleNotes:Array<Note> = []; // notes that can be hit
+			var dumbNotes:Array<Note> = []; // notes to kill later
+
+			notes.forEachAlive(function(daNote:Note)
+			{
+				if (daNote.canBeHit && daNote.mustPress && !daNote.tooLate && !daNote.wasGoodHit)
+				{
+					goodNoteHit(daNote);
+					for (coolNote in possibleNotes)
+					{
+						if (coolNote.noteData == daNote.noteData && Math.abs(daNote.strumTime - coolNote.strumTime) < 10)
+						{ // if it's the same note twice at < 10ms distance, just delete it
+							// EXCEPT u cant delete it in this loop cuz it fucks with the collection lol
+							dumbNotes.push(daNote);
+							break;
+						}
+						else if (coolNote.noteData == daNote.noteData && daNote.strumTime < coolNote.strumTime)
+						{ // if daNote is earlier than existing note (coolNote), replace
+							possibleNotes.remove(coolNote);
+							possibleNotes.push(daNote);
+							break;
+						}
+					}
+					else
+					{
+						possibleNotes.push(daNote);
+					}
+				}
+			});
+
+			for (note in dumbNotes)
+			{
+				FlxG.log.add("killing dumb ass note at " + note.strumTime);
+				note.kill();
+				notes.remove(note, true);
+				note.destroy();
 			}
-		});
 
-    if (possibleNotes.length != 0)
-		{
-			for (daNote in possibleNotes)
+			possibleNotes.sort((a, b) -> Std.int(a.strumTime - b.strumTime));
+
+			else if (possibleNotes.length > 0)
 			{
-				if ((pressArray[daNote.noteData] && !daNote.isSustainNote) || (holdArray[daNote.noteData] && daNote.isSustainNote))
-					goodNoteHit(daNote); 
-				break;
+				for (shit in 0...pressArray.length)
+				{ // if a direction is hit that shouldn't be
+					if (pressArray[shit] && !directionList.contains(shit))
+						noteMiss(shit);
+				}
+			}
+			else
+			{
+				for (shit in 0...pressArray.length)
+					if (pressArray[shit])
+						noteMiss(shit);
 			}
 		}
 
-		for (note in dumbNotes)
+		if (boyfriend.holdTimer > Conductor.stepCrochet * 4 * 0.001 && !holdArray.contains(true))
 		{
-			FlxG.log.add("killing dumb ass note at " + note.strumTime);
-			note.kill();
-			notes.remove(note, true);
-			note.destroy();
+			if (boyfriend.animation.curAnim.name.startsWith('sing') && !boyfriend.animation.curAnim.name.endsWith('miss'))
+			{
+				boyfriend.playAnim('idle');
+			}
 		}
 
 		playerStrums.forEach(function(spr:FlxSprite)
