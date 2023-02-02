@@ -63,7 +63,8 @@
 	<assets path="assets/songs"    library="songs"    exclude="*.fla|*.mp3" unless="web"/>
 	<assets path="assets/shared"   library="shared"   exclude="*.fla|*.ogg" if="web"/>
 	<assets path="assets/shared"   library="shared"   exclude="*.fla|*.mp3" unless="web"/>
-	
+
+  <assets path="mobile" rename="assets/mobile" if="mobile" /> <!-- in order to not have the mobile assets in another builds -saw -->
 	<!-- <assets path='example_mods' rename='mods' embed='false'/> -->
 
 	<template path="example_mods" rename="mods" />
