@@ -2197,13 +2197,13 @@ class PlayState extends MusicBeatState
 
     if (possibleNotes.length != 0)
     {
-			for (theHuh in possibleNotes)
+			for (daNote in possibleNotes)
 			{
-				var daNote = directionsArray[theHuh.noteData][0];
-
-				if ((holdArray.contains(true) && daNote.isSustainNote) || (pressArray.contains(true) && !daNote.isSustainNote))
-					goodNoteHit(daNote);
-
+				if (daNote == directionsArray[daNote.noteData][0])
+				{
+					if (holdArray.contains(true) && daNote.isSustainNote || pressArray.contains(true) && !daNote.isSustainNote)
+						goodNoteHit(daNote);
+				}
 				break;
 			}
     }
@@ -2215,6 +2215,23 @@ class PlayState extends MusicBeatState
 			notes.remove(note, true);
 			note.destroy();
 		}
+
+		playerStrums.forEach(function(spr:FlxSprite)
+		{
+			if (pressArray[spr.ID] && spr.animation.curAnim.name != 'confirm')
+				spr.animation.play('pressed');
+			if (!holdArray[spr.ID])
+				spr.animation.play('static');
+
+			if (spr.animation.curAnim.name == 'confirm' && !curStage.startsWith('school'))
+			{
+				spr.centerOffsets();
+				spr.offset.x -= 13;
+				spr.offset.y -= 13;
+			}
+			else
+				spr.centerOffsets();
+		});
 	}
 	function noteMiss(direction:Int = 1):Void
 	{
