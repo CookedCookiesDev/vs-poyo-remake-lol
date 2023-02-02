@@ -250,7 +250,7 @@ class PlayState extends MusicBeatState
 		gf = new Character(400, 130, gfVersion);
 		gf.scrollFactor.set(0.95, 0.95);
 
-		dad = new Character(100, 100, SONG.'dad');
+		dad = new Character(100, 100, 'dad');
 
 		camPos = new FlxPoint(dad.getGraphicMidpoint().x, dad.getGraphicMidpoint().y);
 
@@ -2200,7 +2200,9 @@ class PlayState extends MusicBeatState
 			{
 				if (daNote.canBeHit && daNote.mustPress && !daNote.tooLate && !daNote.wasGoodHit)
 				{
-					goodNoteHit(daNote);
+					if (pressArray[daNote.noteData])
+						goodNoteHit(daNote);
+
 					if (directionList.contains(daNote.noteData))
 					{
 						for (coolNote in possibleNotes)
