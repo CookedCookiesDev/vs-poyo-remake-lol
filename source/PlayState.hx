@@ -103,6 +103,9 @@ class PlayState extends MusicBeatState
 	private var camHUD:FlxCamera;
 	private var camGame:FlxCamera;
 
+	private var camHUDZoomVar:Float = 0;
+	//important for full screen
+
 	var dialogue:Array<String> = ['blah blah blah', 'coolswag'];
 
 	public static var seenCutscene:Bool = false;
@@ -1564,7 +1567,6 @@ class PlayState extends MusicBeatState
 		if (camZooming)
 		{
 			camGame.zoom = FlxMath.lerp(defaultCamZoom, camGame.zoom, 0.95);
-			camHUD.zoom = FlxMath.lerp(1, camHUD.zoom, 0.95);
 		}
 
 		FlxG.watch.addQuick("beatShit", curBeat);
@@ -2537,13 +2539,11 @@ class PlayState extends MusicBeatState
 			if (curSong.toLowerCase() == 'milf' && curBeat >= 168 && curBeat < 200 && camZooming && camGame.zoom < 1.35)
 			{
 				camGame.zoom += 0.015;
-				camHUD.zoom += 0.03;
 			}
 
 			if (camZooming && camGame.zoom < 1.35 && curBeat % 4 == 0)
 			{
 				camGame.zoom += 0.015;
-				camHUD.zoom += 0.03;
 			}
 		}
 
