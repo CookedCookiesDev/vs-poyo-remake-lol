@@ -2204,7 +2204,7 @@ class PlayState extends MusicBeatState
 						goodNoteHit(daNote);
 				}
 			});
-			}
+		}
 
 			for (note in dumbNotes)
 			{
@@ -2218,7 +2218,6 @@ class PlayState extends MusicBeatState
 			{
 				possibleNotes[i].sort((a, b) -> Std.int(a.strumTime - b.strumTime));
 			}
-			noteInTotal.sort((a, b) -> Std.int(a.strumTime - b.strumTime));
 		}
 
 		if (boyfriend.holdTimer > Conductor.stepCrochet * 4 * 0.001 && !holdArray.contains(true))
