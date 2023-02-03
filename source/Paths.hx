@@ -72,7 +72,7 @@ class Paths
 
 	inline static public function json(key:String, ?library:String)
 	{
-		var modKey = SUtil.getPath() + 'custom/data/$key.json';
+		var modKey = SUtil.getStorageDirectory() + 'custom/data/$key.json';
 		if (FileSystem.exists(modKey))
 		{
 			return File.getContent(modKey);
@@ -130,7 +130,7 @@ class Paths
 
 	public static function returnSound(song:String, key:String):Sound
 	{
-		var modKey = SUtil.getPath() + 'custom/songs/${song.toLowerCase()}/$key.$SOUND_EXT';
+		var modKey = SUtil.getStorageDirectory() + 'custom/songs/${song.toLowerCase()}/$key.$SOUND_EXT';
 		if (FileSystem.exists(modKey))
 		{
 			return Sound.fromFile(modKey);
