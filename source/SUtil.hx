@@ -58,12 +58,7 @@ class SUtil
 	 */
 	public static function checkFiles():Void
 	{
-		#if mobile
-		if (!FileSystem.exists(SUtil.getStorageDirectory() + 'custom'))
-		{
-			FileSystem.createDirectory(SUtil.getStorageDirectory() + 'custom');
-		}
-		#end
+		//nothin for now since i plan to rewrite it
 	}
 
 	/**
