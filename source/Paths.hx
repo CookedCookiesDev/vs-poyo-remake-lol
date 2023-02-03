@@ -98,24 +98,30 @@ class Paths
 
 	inline static public function voices(song:String)
 	{
-		var modKey = SUtil.getStorageDirectory() + 'custom/songs/${song.toLowerCase()}/Voices.$SOUND_EXT';
-		if (FileSystem.exists(modKey))
+		var sound:Sound = function()
 		{
-			return Sound.fromFile(modKey);
+			var modKey = SUtil.getStorageDirectory() + 'custom/songs/${song.toLowerCase()}/Voices.$SOUND_EXT';
+			if (FileSystem.exists(modKey))
+			{
+				return Sound.fromFile(modKey);
+			}
+	
+			return OpenFlAssets.getSound('songs:assets/songs/${song.toLowerCase()}/Voices.$SOUND_EXT');
 		}
-
-		return 'songs:assets/songs/${song.toLowerCase()}/Voices.$SOUND_EXT';
 	}
 
 	inline static public function inst(song:String)
 	{
-		var modKey = SUtil.getStorageDirectory() + 'custom/songs/${song.toLowerCase()}/Inst.$SOUND_EXT';
-		if (FileSystem.exists(modKey))
+		var sound:Sound = function()
 		{
-			return Sound.fromFile(modKey);
+			var modKey = SUtil.getStorageDirectory() + 'custom/songs/${song.toLowerCase()}/Inst.$SOUND_EXT';
+			if (FileSystem.exists(modKey))
+			{
+				return Sound.fromFile(modKey);
+			}
+	
+			return OpenFlAssets.getSound('songs:assets/songs/${song.toLowerCase()}/Inst.$SOUND_EXT');
 		}
-
-		return 'songs:assets/songs/${song.toLowerCase()}/Inst.$SOUND_EXT';
 	}
 
 	inline static public function image(key:String, ?library:String)
