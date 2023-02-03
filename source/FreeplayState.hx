@@ -63,7 +63,7 @@ class FreeplayState extends MusicBeatState
 		#if debug
 		isDebug = true;
 		#end
-		var directory = SUtil.getStorageDirectory() + 'custom/songs';
+		var directory = SUtil.getPath() + 'custom/songs';
 		if (FileSystem.exists(directory) && FileSystem.isDirectory(directory))
 		{
 			var songs = FileSystem.readDirectory(directory);
