@@ -61,7 +61,7 @@ class SUtil
 		#if mobile
 		if (!FileSystem.exists(SUtil.getStorageDirectory() + 'custom'))
 		{
-			FileSystem.createDirectory(SUtil.getStorageDirectory() + 'custom')
+			FileSystem.createDirectory(SUtil.getStorageDirectory() + 'custom');
 		}
 		#end
 	}
