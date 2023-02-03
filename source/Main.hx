@@ -86,8 +86,7 @@ class Main extends Sprite
 
 		addChild(new FlxGame(gameWidth, gameHeight, initialState, zoom, framerate, framerate, skipSplash, startFullscreen));
 
-		SUtil.doTheCheck();
-		SUtil.createModFolder();
+		SUtil.checkFiles();
 
 		#if !mobile
 		fpsCounter = new FPS(10, 3, 0xFFFFFF);
