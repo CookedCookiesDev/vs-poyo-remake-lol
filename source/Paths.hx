@@ -4,6 +4,11 @@ import flixel.FlxG;
 import flixel.graphics.frames.FlxAtlasFrames;
 import openfl.utils.AssetType;
 import openfl.utils.Assets as OpenFlAssets;
+import flash.media.Sound;
+#if sys
+import sys.io.File;
+import sys.FileSystem;
+#end
 
 class Paths
 {
@@ -67,6 +72,12 @@ class Paths
 
 	inline static public function json(key:String, ?library:String)
 	{
+		var modKey = SUtil.getStorageDirectory() + 'custom/data/$key.json';
+		if (FileSystem.exists(modKey))
+		{
+			return File.getContent(modKey);
+		}
+
 		return getPath('data/$key.json', TEXT, library);
 	}
 
@@ -87,11 +98,23 @@ class Paths
 
 	inline static public function voices(song:String)
 	{
+		var modKey = SUtil.getStorageDirectory() + 'custom/songs/${song.toLowerCase()}/Voices.$SOUND_EXT';
+		if (FileSystem.exists(modKey))
+		{
+			return Sound.fromFile(modKey);
+		}
+
 		return 'songs:assets/songs/${song.toLowerCase()}/Voices.$SOUND_EXT';
 	}
 
 	inline static public function inst(song:String)
 	{
+		var modKey = SUtil.getStorageDirectory() + 'custom/songs/${song.toLowerCase()}/Inst.$SOUND_EXT';
+		if (FileSystem.exists(modKey))
+		{
+			return Sound.fromFile(modKey);
+		}
+
 		return 'songs:assets/songs/${song.toLowerCase()}/Inst.$SOUND_EXT';
 	}
 
