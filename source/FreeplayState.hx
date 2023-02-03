@@ -58,8 +58,20 @@ class FreeplayState extends MusicBeatState
 
 		#if debug
 		isDebug = true;
-		addSong('Test', 1, 'bf-pixel');
 		#end
+		var directory = SUtil.getStorageDirectory() + 'custom/songs';
+		if (FileSystem.exists(directory) && FileSystem.isDirectory(directory))
+		{
+			var songs = FileSystem.readDirectory(directory);
+
+			for (song in songs)
+			{
+				if (FileSystem.isDirectory(song))
+					addSong(song, 1, 'dad');
+			}
+		}
+
+		//addSong('Test', 1, 'bf-pixel');
 
 		var initSonglist = CoolUtil.coolTextFile(Paths.txt('freeplaySonglist'));
 
