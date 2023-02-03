@@ -96,13 +96,13 @@ class Paths
 		return getPath('music/$key.$SOUND_EXT', MUSIC, library);
 	}
 
-	inline static public function voices(song:String)
+	inline static public function voices(song:String):Any
 	{
 		var sound = returnSound(song, 'Voices');
 		return sound;
 	}
 
-	inline static public function inst(song:String)
+	inline static public function inst(song:String):Any
 	{
 		var sound = returnSound(song, 'Inst');
 		return sound;
@@ -128,7 +128,7 @@ class Paths
 		return FlxAtlasFrames.fromSpriteSheetPacker(image(key, library), file('images/$key.txt', library));
 	}
 
-	function returnSound(song:String, key:String):Sound
+	public static function returnSound(song:String, key:String):Sound
 	{
 		var modKey = SUtil.getStorageDirectory() + 'custom/songs/${song.toLowerCase()}/$key.$SOUND_EXT';
 		if (FileSystem.exists(modKey))
