@@ -108,6 +108,7 @@ class Paths
 	
 			return OpenFlAssets.getSound('songs:assets/songs/${song.toLowerCase()}/Voices.$SOUND_EXT');
 		}
+		return sound;
 	}
 
 	inline static public function inst(song:String)
@@ -122,6 +123,7 @@ class Paths
 	
 			return OpenFlAssets.getSound('songs:assets/songs/${song.toLowerCase()}/Inst.$SOUND_EXT');
 		}
+		return sound;
 	}
 
 	inline static public function image(key:String, ?library:String)
