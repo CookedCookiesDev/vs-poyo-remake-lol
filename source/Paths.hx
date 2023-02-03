@@ -4,7 +4,7 @@ import flixel.FlxG;
 import flixel.graphics.frames.FlxAtlasFrames;
 import openfl.utils.AssetType;
 import openfl.utils.Assets as OpenFlAssets;
-import openfl.media.Sound;
+import flash.media.Sound;
 #if sys
 import sys.io.File;
 import sys.FileSystem;
