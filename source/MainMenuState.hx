@@ -1,6 +1,5 @@
 package;
 
-import NGio;
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
@@ -26,10 +25,6 @@ using StringTools;
 
 #if discord_rpc
 import Discord.DiscordClient;
-#end
-#if newgrounds
-import io.newgrounds.NG;
-import ui.NgPrompt;
 #end
 
 class MainMenuState extends MusicBeatState
