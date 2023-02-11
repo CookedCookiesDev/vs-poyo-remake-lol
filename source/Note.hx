@@ -6,14 +6,9 @@ import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.math.FlxMath;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
-import shaderslmfao.ColorSwap;
 import ui.PreferencesMenu;
 
 using StringTools;
-
-#if polymod
-import polymod.format.ParseRules.TargetSignatureElement;
-#end
 
 class Note extends FlxSprite
 {
@@ -29,19 +24,11 @@ class Note extends FlxSprite
 	private var willMiss:Bool = false;
 
 	public var altNote:Bool = false;
-	public var invisNote:Bool = false;
 
 	public var sustainLength:Float = 0;
 	public var isSustainNote:Bool = false;
 
-	public var colorSwap:ColorSwap;
-	public var noteScore:Float = 1;
-
 	public static var swagWidth:Float = 160 * 0.7;
-	public static var PURP_NOTE:Int = 0;
-	public static var GREEN_NOTE:Int = 2;
-	public static var BLUE_NOTE:Int = 1;
-	public static var RED_NOTE:Int = 3;
 
 	public static var arrowColors:Array<Float> = [1, 1, 1, 1];
 
@@ -113,18 +100,7 @@ class Note extends FlxSprite
 				setGraphicSize(Std.int(width * 0.7));
 				updateHitbox();
 				antialiasing = true;
-
-				// colorSwap.colorToReplace = 0xFFF9393F;
-				// colorSwap.newColor = 0xFF00FF00;
-
-				// color = FlxG.random.color();
-				// color.saturation *= 4;
-				// replaceColor(0xFFC1C1C1, FlxColor.RED);
 		}
-
-		colorSwap = new ColorSwap();
-		shader = colorSwap.shader;
-		updateColors();
 
 		switch (noteData)
 		{
@@ -146,7 +122,6 @@ class Note extends FlxSprite
 
 		if (isSustainNote && prevNote != null)
 		{
-			noteScore * 0.2;
 			alpha = 0.6;
 
 			if (PreferencesMenu.getPref('downscroll'))
@@ -189,14 +164,8 @@ class Note extends FlxSprite
 
 				prevNote.scale.y *= Conductor.stepCrochet / 100 * 1.5 * PlayState.SONG.speed;
 				prevNote.updateHitbox();
-				// prevNote.setGraphicSize();
 			}
 		}
-	}
-
-	public function updateColors():Void
-	{
-		colorSwap.update(arrowColors[noteData]);
 	}
 
 	override function update(elapsed:Float)

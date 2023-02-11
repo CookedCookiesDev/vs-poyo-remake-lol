@@ -51,13 +51,13 @@ class PreferencesMenu extends ui.OptionsState.Page
 		});
 	}
 
-	public static function getPref(pref:String):Dynamic
+	inline public static function getPref(pref:String):Dynamic
 	{
 		return preferences.get(pref);
 	}
 
 	// easy shorthand?
-	public static function setPref(pref:String, value:Dynamic):Void
+	inline public static function setPref(pref:String, value:Dynamic):Void
 	{
 		preferences.set(pref, value);
 	}
@@ -93,7 +93,6 @@ class PreferencesMenu extends ui.OptionsState.Page
 			{
 				case 'TBool':
 					prefToggle(prefString);
-
 				default:
 					trace('swag');
 			}
@@ -103,7 +102,6 @@ class PreferencesMenu extends ui.OptionsState.Page
 		{
 			case 'TBool':
 				createCheckbox(prefString);
-
 			default:
 				trace('swag');
 		}
@@ -139,15 +137,11 @@ class PreferencesMenu extends ui.OptionsState.Page
 			case 'auto-pause':
 				FlxG.autoPause = getPref('auto-pause');
 		}
-
-		if (prefName == 'fps-counter') {}
 	}
 
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
-
-		// menuCamera.followLerp = CoolUtil.camLerpShit(0.05);
 
 		items.forEach(function(daItem:TextMenuItem)
 		{
@@ -166,9 +160,7 @@ class PreferencesMenu extends ui.OptionsState.Page
 			trace('set preference!');
 		}
 		else
-		{
 			trace('found preference: ' + preferences.get(prefString));
-		}
 	}
 }
 
